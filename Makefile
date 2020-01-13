@@ -17,6 +17,9 @@ uninstall:
 develop:
 	python setup.py develop
 
+# Run tests
+test:
+	python test.py
 
 # Remove build files
 clean:
