@@ -11,8 +11,8 @@ from . import enums, tuples
 ## Constants
 PACKAGE_VER = "1.0"             # Python package version
 PROTOCOL_VER = 0x2000638        # Protocol implementation version
-DEF_HOST = "127.0.0.1"          # Default socket host
-DEF_PORT = 5555                 # Default socket port
+DEFAULT_HOST = "127.0.0.1"      # Default socket host
+DEFAULT_PORT = 5555             # Default socket port
 TIMEOUT = 2                     # Socket read timeout (sec)
 
 
@@ -23,5 +23,7 @@ class SpyClient:
     :param port: SpyServer TCP port (5555)
     """
 
-    def __init__(self, host=DEF_HOST, port=DEF_PORT):
-        return
+    def __init__(self, host=DEFAULT_HOST, port=DEFAULT_PORT):
+        self.host = host
+        self.port = port
+        self.name = f"SpyClient for Python v{PACKAGE_VER}"
