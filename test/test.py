@@ -9,9 +9,13 @@ def init():
     print(f"HOST PORT:    {c.port}")
     print(f"CLIENT NAME:  {c.name}\n")
 
-    if c.connect():
-        print(f"CONNECTED to {c.host}:{c.port}\n")
-
+    # Connect to server
+    c.connect()
+    if c.connected: print(f"CONNECTED to {c.host}:{c.port}\n")
+    
+    # Disconnect from server
+    c.disconnect()
+    if not c.connected: print("DISCONNECTED")
 
 try:
     init()

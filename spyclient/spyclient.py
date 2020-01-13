@@ -26,7 +26,7 @@ class SpyClient:
 
     def __init__(self, host=DEFAULT_HOST, port=DEFAULT_PORT, name=DEFAULT_NAME):
         # Properties
-        self.host = host                # SpyServer host IP address
+        self.host = host                # SpyServer IP address
         self.port = port                # SpyServer TCP port
         self.addr = (host, port)        # SpyServer address tuple
         self.name = name                # SpyClient name
@@ -35,6 +35,7 @@ class SpyClient:
         self.connected = False
 
 
+    #region Socket Functions
     def connect(self):
         """
         Connect to SpyServer
@@ -50,7 +51,34 @@ class SpyClient:
         except socket.error:
             raise
         
-        # Set connected flag
         self.connected = True
-
         return True
+
+    def disconnect(self):
+        """
+        Disconnect from SpyServer
+        """
+
+        self.sck.close()
+        self.connected = False
+
+    def send(self, data):
+        """
+        Send data to server
+        """
+
+        if not self.connected: return False
+        self.sck.send(data)
+
+    def recv(self, length=20):
+        """
+        Receive data from server
+        """
+
+        if not self.connected: return False
+        
+        try:
+            return self.sck.recv(length)
+        except:
+            return None
+    #endregion
