@@ -42,7 +42,7 @@
         {
             "label": "Run Test Script",
             "type": "shell",
-            "command": "python test.py",
+            "command": "python test/test.py",
             "problemMatcher": []
         },
         {

@@ -10,17 +10,18 @@ install:
 
 # Uninstall package
 uninstall:
-	pip uninstall -y spyclient
+	pip3 uninstall -y spyclient
 
 
 # Develop package locally
 develop:
 	python setup.py develop
 
+
 # Run tests
 test:
-	#test\v1700\run.bat
 	python test\test.py
+
 
 # Remove build files
 clean:
