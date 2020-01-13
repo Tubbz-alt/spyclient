@@ -5,8 +5,8 @@ https://github.com/sam210723/spyclient
 Airspy SpyServer client implementation for Python 3
 """
 
+import socket
 from . import enums, tuples
-
 
 ## Constants
 PACKAGE_VER = "1.0"             # Python package version
@@ -25,7 +25,32 @@ class SpyClient:
     """
 
     def __init__(self, host=DEFAULT_HOST, port=DEFAULT_PORT, name=DEFAULT_NAME):
+        # Properties
         self.host = host                # SpyServer host IP address
         self.port = port                # SpyServer TCP port
         self.addr = (host, port)        # SpyServer address tuple
         self.name = name                # SpyClient name
+
+        # Flags
+        self.connected = False
+
+
+    def connect(self):
+        """
+        Connect to SpyServer
+        """
+
+        # Create TCP socket
+        self.sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.sck.settimeout(TIMEOUT)
+
+        # Try to connect
+        try:
+            self.sck.connect(self.addr)
+        except socket.error:
+            raise
+        
+        # Set connected flag
+        self.connected = True
+
+        return True

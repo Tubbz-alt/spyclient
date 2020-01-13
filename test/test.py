@@ -7,7 +7,10 @@ def init():
     # Print properties
     print(f"HOST IP:      {c.host}")
     print(f"HOST PORT:    {c.port}")
-    print(f"CLIENT NAME:  {c.name}")
+    print(f"CLIENT NAME:  {c.name}\n")
+
+    if c.connect():
+        print(f"CONNECTED to {c.host}:{c.port}\n")
 
 
 try:
