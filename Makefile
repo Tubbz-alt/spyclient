@@ -19,10 +19,14 @@ develop:
 
 # Run tests
 test:
-	python test.py
+	#test\v1700\run.bat
+	python test\test.py
 
 # Remove build files
 clean:
 	rmdir /S /Q spyclient.egg-info
 	rmdir /S /Q build
 	rmdir /S /Q dist
+
+
+.PHONY: all test clean
