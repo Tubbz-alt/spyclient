@@ -6,13 +6,13 @@ def init():
     c = SpyClient("127.0.0.1", 5555)
 
     # Print properties
-    print(f"HOST IP:      {c.host}")
-    print(f"HOST PORT:    {c.port}")
-    print(f"CLIENT NAME:  {c.name}\n")
+    print("HOST IP:      {}".format(c.host))
+    print("HOST PORT:    {}".format(c.port))
+    print("CLIENT NAME:  {}\n".format(c.name))
 
     # Connect to server
     c.connect()
-    if c.connected: print(f"CONNECTED to {c.host}:{c.port}\n")
+    if c.connected: print("CONNECTED to {}:{}\n".format(c.host, c.port))
     
     time.sleep(1)
 

@@ -12,7 +12,6 @@ from . import enums, tuples
 ## Constants
 PACKAGE_VER = "1.0"             # Python package version
 PROTOCOL_VER = 0x20006A4        # Protocol implementation version
-DEFAULT_NAME = f"SpyClient for Python v{PACKAGE_VER}"
 DEFAULT_HOST = "127.0.0.1"      # Default socket host
 DEFAULT_PORT = 5555             # Default socket port
 TIMEOUT = 2                     # Socket read timeout (sec)
@@ -23,15 +22,14 @@ class SpyClient:
     Airspy SpyServer client implementation for Python 3.
     :param host: SpyServer host IP address (127.0.0.1)
     :param port: SpyServer TCP port (5555)
-    :param name: Client name ("SpyClient for Python")
     """
 
-    def __init__(self, host=DEFAULT_HOST, port=DEFAULT_PORT, name=DEFAULT_NAME):
+    def __init__(self, host=DEFAULT_HOST, port=DEFAULT_PORT):
         # Properties
         self.host = host                # SpyServer IP address
         self.port = port                # SpyServer TCP port
         self.addr = (host, port)        # SpyServer address tuple
-        self.name = name                # SpyClient name
+        self.name = "SpyClient for Python v{}".format(PACKAGE_VER)
 
         # Flags
         self.connected = False
