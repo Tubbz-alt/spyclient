@@ -1,7 +1,7 @@
 # Download latest SpyServer
 wget https://airspy.com/downloads/spyserver-linux-x64.tgz
-tar -xvzf spyserver-linux-x64.tgz -C spyserver
-cd spyserver
+tar -xvzf spyserver-linux-x64.tgz
+cd spyserver-linux-x64
 chmod +x ./spyserver
 ./spyserver &
 
