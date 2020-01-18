@@ -1,3 +1,4 @@
+import time
 from spyclient import SpyClient
 
 def init():
@@ -13,6 +14,8 @@ def init():
     c.connect()
     if c.connected: print(f"CONNECTED to {c.host}:{c.port}\n")
     
+    time.sleep(1)
+
     # Disconnect from server
     c.disconnect()
     if not c.connected: print("DISCONNECTED")
