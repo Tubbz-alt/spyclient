@@ -20,8 +20,10 @@ def init():
     c.disconnect()
     if not c.connected: print("DISCONNECTED")
 
+    exit(0)
+
 try:
     init()
 except KeyboardInterrupt:
     print("Exiting...")
-    exit()
+    exit(1)

@@ -1,0 +1,21 @@
+language: python
+dist: bionic
+addons:
+  apt:
+    update: true
+    packages:
+    - rtl-sdr
+    - librtlsdr-dev
+    - libairspy-dev
+    - libusb-1.0-0-dev
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+before_install:
+  - python --version
+  - pip install -U pip
+  - pip install -U pytest
+  - chmod +x .travis-ci/install.sh
+install: .travis-ci/install.sh
+script: make test
