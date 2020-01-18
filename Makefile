@@ -20,7 +20,7 @@ develop:
 
 # Run tests
 test:
-	python test\test.py
+	python test/test.py
 
 
 # Remove build files
