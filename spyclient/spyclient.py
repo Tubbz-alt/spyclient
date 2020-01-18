@@ -5,6 +5,7 @@ https://github.com/sam210723/spyclient
 Airspy SpyServer client implementation for Python 3
 """
 
+import ipaddress
 import socket
 import struct
 from . import enums, tuples
@@ -74,6 +75,17 @@ class SpyClient:
         Connect to SpyServer
         """
 
+        # Validate IP address
+        try:
+            ipaddress.ip_address(self.host)
+        except ValueError:
+            raise
+
+        # Validate port
+        if not (1023 < self.port < 65536):
+            raise ValueError("Host port \"{}\" is invalid".format(self.port))
+
+        # Create and configure socket
         self.sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sck.settimeout(TIMEOUT)
 
@@ -81,13 +93,14 @@ class SpyClient:
             self.sck.connect(self.addr)
         except socket.error:
             raise
-        
-        self.connected = True
 
         #TODO: Start receive thread loop
 
         self.say_hello()
 
+        #TODO: Set flag after handling client sync and device info
+        self.connected = True
+        
         return True
 
     def disconnect(self):
