@@ -1,4 +1,5 @@
 language: python
+os: linux
 dist: bionic
 addons:
   apt:
@@ -9,6 +10,7 @@ addons:
     - libairspy-dev
     - libusb-1.0-0-dev
 python:
+  - "3.5"
   - "3.6"
   - "3.7"
   - "3.8"
