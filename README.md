@@ -1,7 +1,7 @@
 # SpyServer Client
 
 [![Build Status](https://travis-ci.org/sam210723/spyclient.svg?branch=master)](https://travis-ci.org/sam210723/spyclient)
-[![GitHub license](https://img.shields.io/github/license/sam210723/spyclient.svg)](https://github.com/sam210723/spyclient/master/LICENSE)
+[![GitHub license](https://img.shields.io/github/license/sam210723/spyclient.svg)](https://github.com/sam210723/spyclient/blob/master/LICENSE)
 
 **SpyClient** is a client implementation of the [Airspy SpyServer](https://airspy.com) protocol for Python 3. **SpyServer** is purpose-built server software for accessing Software Defined Radio hardware over a network.
 
