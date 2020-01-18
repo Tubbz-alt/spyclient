@@ -1,5 +1,6 @@
 # SpyServer Client for Python
 
+[![Build Status](https://travis-ci.org/sam210723/spyclient.svg?branch=master)](https://travis-ci.org/sam210723/spyclient)
 [![GitHub license](https://img.shields.io/github/license/sam210723/spyclient.svg)](https://github.com/sam210723/spyclient/master/LICENSE)
 
 **SpyClient** is a Python-based client for [Airspy SpyServer](https://airspy.com).
