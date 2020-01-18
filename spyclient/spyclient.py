@@ -23,6 +23,7 @@ class SpyClient:
     Airspy SpyServer client implementation for Python 3.
     :param host: SpyServer host IP address (127.0.0.1)
     :param port: SpyServer TCP port (5555)
+    :param name: Client name ("SpyClient for Python v{PACKAGE_VER}")
     """
 
     def __init__(self, host=DEFAULT_HOST, port=DEFAULT_PORT, name=DEFAULT_NAME):
@@ -75,17 +76,17 @@ class SpyClient:
         Connect to SpyServer
         """
 
-        # Create TCP socket
         self.sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sck.settimeout(TIMEOUT)
 
-        # Try to connect
         try:
             self.sck.connect(self.addr)
         except socket.error:
             raise
         
         self.connected = True
+
+        #TODO: Start receive thread loop
 
         self.say_hello()
 
