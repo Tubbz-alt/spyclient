@@ -34,6 +34,7 @@ class SpyClient:
         self.port = port                # SpyServer TCP port
         self.name = f"SpyClient for Python v{PACKAGE_VER}"
         self.server_ver = 0             # SpyServer version
+        self.device_info = None         # Server device info
 
         # Flags
         self.connected = False          # Client connected to server
@@ -66,7 +67,21 @@ class SpyClient:
         # Get body of message
         body = self.recv(header.size)
 
-        return
+        # Cast message into named tuple
+        if msg_type == "DEVICE_INFO":
+            unpacked = struct.unpack('IIIIIIIIIIII', body)
+            self.device_info = DeviceInfo(*unpacked)
+
+    def parse_protocol_ver(self, data):
+        """
+        Parse server protocol version into ProtocolVersion named tuple
+        """
+
+        major = data >> 24
+        minor = data >> 16 & 0xFF
+        patch = data & 0xFFFF
+
+        return ProtocolVersion(major, minor, patch)
 
     def say_hello(self):
         """
@@ -97,17 +112,6 @@ class SpyClient:
         # Send command to server
         command = header + body
         self.send(command)
-    
-    def parse_protocol_ver(self, data):
-        """
-        Parse server protocol version into ProtocolVersion named tuple
-        """
-
-        major = data >> 24
-        minor = data >> 16 & 0xFF
-        patch = data & 0xFFFF
-
-        return ProtocolVersion(major, minor, patch)
     #endregion
 
 
@@ -202,4 +206,31 @@ class SpyClient:
             return self.sck.recv(length)
         except:
             return None
+    #endregion
+
+
+    #region Print Functions
+    def print_device_info(self):
+        """
+        Prints device information from server
+        """
+
+        # Loop through fields in DeviceInfo tuple
+        for j in self.device_info._fields:
+            key = j.replace("_", " ").title()
+            key = key.replace("Iq", "IQ")
+            key = key.replace("Adc", "ADC") + ":"
+
+            val = getattr(self.device_info, j)
+
+            # Value formatting
+            if j == "device_type":        val = DeviceType(val).name
+            elif j == "max_sample_rate":  val = str(val/1000000) + " Msps"
+            elif j == "max_bandwidth":    val = str(val/1000000) + " Msps"
+            elif j == "min_frequency":    val = str(val/1000000) + " MHz"
+            elif j == "max_frequency":    val = str(val/1000000) + " MHz"
+            elif j == "adc_resolution":   val = f"{val} bits"
+            elif j == "forced_iq_format": val = True if val else False
+
+            print(f"{key.ljust(20)}{val}")
     #endregion

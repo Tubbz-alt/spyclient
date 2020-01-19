@@ -35,12 +35,13 @@ def init():
     if c.connected: print(f"CONNECTED to {c.host}:{c.host}\n")
     
     time.sleep(2)
-    print(c.server_ver)
+    print(f"Server Version:     v{c.server_ver.major}.{c.server_ver.minor}.{c.server_ver.patch}\n")
+    c.print_device_info()
 
     # Disconnect from server
     time.sleep(0.5)
     c.disconnect()
-    if not c.connected: print("DISCONNECTED")
+    if not c.connected: print("\nDISCONNECTED")
 
     exit(0)
 
