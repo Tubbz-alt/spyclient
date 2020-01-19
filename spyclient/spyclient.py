@@ -32,7 +32,7 @@ class SpyClient:
         # Properties
         self.host = host                # SpyServer IP address
         self.port = port                # SpyServer TCP port
-        self.name = "SpyClient for Python v{}".format(PACKAGE_VER)
+        self.name = f"SpyClient for Python v{PACKAGE_VER}"
 
         # Flags
         self.connected = False          # Client connected to server
@@ -134,7 +134,7 @@ class SpyClient:
 
         # Validate port
         if not (1023 < self.port < 65536):
-            raise ValueError("Host port \"{}\" is invalid".format(self.port))
+            raise ValueError(f"Host port \"{self.port}\" is invalid")
 
         # Create and configure socket
         self.sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

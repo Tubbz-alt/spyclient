@@ -20,7 +20,7 @@ def init():
         
         ver = sys.version.split(" ")[0]
         job = os.environ['TRAVIS_JOB_NUMBER']
-        c.name = "Travis CI job #{} under Python {}".format(job, ver)
+        c.name = f"Travis CI job #{job} under Python {ver}"
     except KeyError:
         pass
 
@@ -32,7 +32,7 @@ def init():
 
     # Connect to server
     c.connect()
-    if c.connected: print("CONNECTED to {}:{}\n".format(c.host, c.port))
+    if c.connected: print(f"CONNECTED to {c.host}:{c.host}\n")
     
     time.sleep(3)
 
