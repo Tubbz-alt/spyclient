@@ -6,8 +6,10 @@ Airspy SpyServer client implementation for Python 3
 """
 
 import ipaddress
+from select import select
 import socket
 import struct
+import threading
 from . import enums, tuples
 
 ## Constants
@@ -29,11 +31,11 @@ class SpyClient:
         # Properties
         self.host = host                # SpyServer IP address
         self.port = port                # SpyServer TCP port
-        self.addr = (host, port)        # SpyServer address tuple
         self.name = "SpyClient for Python v{}".format(PACKAGE_VER)
 
         # Flags
-        self.connected = False
+        self.connected = False          # Client connected to server
+        self.rx_stop = False            # Stop socket receive thread
 
 
     #region Protocol Functions
@@ -70,6 +72,29 @@ class SpyClient:
 
 
     #region Socket Functions
+    def recv_loop(self):
+        """
+        Socket receive thread
+        """
+
+        while not self.rx_stop:
+            # Block thread until socket is ready for reading
+            rx, tx, err = select([ self.sck ], [], [], TIMEOUT)
+
+            # Socket has data available
+            if rx:
+                # Get message header
+                header = self.recv()
+
+                # Ignore bool len exception
+                if type(header) == bool:
+                    continue
+
+                # Message header is empty
+                if header == b'':
+                    self.disconnect()
+                    raise PermissionError("SpyServer could not find/acquire a device")
+    
     def connect(self):
         """
         Connect to SpyServer
@@ -90,17 +115,21 @@ class SpyClient:
         self.sck.settimeout(TIMEOUT)
 
         try:
-            self.sck.connect(self.addr)
+            self.sck.connect((self.host, self.port))
         except socket.error:
             raise
 
-        #TODO: Start receive thread loop
+        #TODO: Set flag after handling client sync and device info
+        self.connected = True
+
+        # Setup and start socket receive thread
+        self.rx_thread = threading.Thread()
+        self.rx_thread.name = "SpyClient Socket Receiver"
+        self.rx_thread.run = self.recv_loop
+        self.rx_thread.start()
 
         self.say_hello()
 
-        #TODO: Set flag after handling client sync and device info
-        self.connected = True
-        
         return True
 
     def disconnect(self):
@@ -108,6 +137,7 @@ class SpyClient:
         Disconnect from SpyServer
         """
 
+        self.rx_stop = True
         self.sck.close()
         self.connected = False
 
