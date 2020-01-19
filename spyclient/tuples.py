@@ -1,5 +1,6 @@
 from typing import NamedTuple
 
+
 class MessageHeader(NamedTuple):
     """
     Message header struct

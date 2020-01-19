@@ -10,7 +10,8 @@ from select import select
 import socket
 import struct
 import threading
-from . import enums, tuples
+from .enums import *
+from .tuples import *
 
 ## Constants
 PACKAGE_VER = "1.0"             # Python package version
@@ -39,6 +40,29 @@ class SpyClient:
 
 
     #region Protocol Functions
+    def parse_msg(self, header_bytes):
+        """
+        Parse incoming message from server
+        """
+
+        # Check header length
+        if header_bytes == None or len(header_bytes) < 20:
+            return False
+
+        # Parse header
+        header_tuple = struct.unpack('IIIII', header_bytes)
+        header = MessageHeader(*header_tuple)
+        msg_type = MessageType(header.message_type).name
+
+        print(msg_type)
+        print(header)
+        print()
+
+        # Get body of message
+        body = self.recv(header.size)
+
+        return
+
     def say_hello(self):
         """
         Say hello to server
@@ -52,7 +76,7 @@ class SpyClient:
 
         # Send version and client name to server
         body = ver + client        
-        self.send_command(enums.CommandType.HELLO.value, body)
+        self.send_command(CommandType.HELLO.value, body)
     
     def send_command(self, cmd, body):
         """
@@ -94,6 +118,8 @@ class SpyClient:
                 if header == b'':
                     self.disconnect()
                     raise PermissionError("SpyServer could not find/acquire a device")
+
+                self.parse_msg(header)
     
     def connect(self):
         """
