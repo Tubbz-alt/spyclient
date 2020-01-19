@@ -1,11 +1,31 @@
-import time
+import os
+from socket import gethostbyname
 from spyclient import SpyClient
+import sys
+import time
 
 def init():
+    # Get IP of test SpyServer
+    host = "vksdr.com"
+    ip = gethostbyname(host)
+    #ip = "127.0.0.1"
+
     # Create SpyClient instance
-    c = SpyClient("127.0.0.1", 5555)
+    c = SpyClient(ip, 5555)
+
+    # Check for Travis CI environment
+    try:
+        os.environ['TRAVIS']
+        print("Detected Travis CI environment")
+        
+        ver = sys.version.split(" ")[0]
+        job = os.environ['TRAVIS_JOB_NUMBER']
+        c.name = "Travis CI job #{} under Python {}".format(job, ver)
+    except KeyError:
+        pass
 
     # Print properties
+    print("HOST:         {}".format(host))
     print("HOST IP:      {}".format(c.host))
     print("HOST PORT:    {}".format(c.port))
     print("CLIENT NAME:  {}\n".format(c.name))
@@ -14,7 +34,7 @@ def init():
     c.connect()
     if c.connected: print("CONNECTED to {}:{}\n".format(c.host, c.port))
     
-    time.sleep(1)
+    time.sleep(3)
 
     # Disconnect from server
     c.disconnect()
