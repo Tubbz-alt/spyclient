@@ -33,6 +33,7 @@ class SpyClient:
         self.host = host                # SpyServer IP address
         self.port = port                # SpyServer TCP port
         self.name = f"SpyClient for Python v{PACKAGE_VER}"
+        self.server_ver = 0             # SpyServer version
 
         # Flags
         self.connected = False          # Client connected to server
@@ -57,6 +58,10 @@ class SpyClient:
         print(msg_type)
         print(header)
         print()
+
+        # Parse server protocol version
+        self.server_ver = self.parse_protocol_ver(header.protocol)
+        #TODO: Check protocol version
 
         # Get body of message
         body = self.recv(header.size)
@@ -92,6 +97,17 @@ class SpyClient:
         # Send command to server
         command = header + body
         self.send(command)
+    
+    def parse_protocol_ver(self, data):
+        """
+        Parse server protocol version into ProtocolVersion named tuple
+        """
+
+        major = data >> 24
+        minor = data >> 16 & 0xFF
+        patch = data & 0xFFFF
+
+        return ProtocolVersion(major, minor, patch)
     #endregion
 
 

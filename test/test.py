@@ -20,7 +20,7 @@ def init():
         
         ver = sys.version.split(" ")[0]
         job = os.environ['TRAVIS_JOB_NUMBER']
-        c.name = f"Travis CI job #{job} under Python {ver}"
+        c.name = f"Travis CI #{job} (Python {ver})"
     except KeyError:
         pass
 
@@ -34,9 +34,11 @@ def init():
     c.connect()
     if c.connected: print(f"CONNECTED to {c.host}:{c.host}\n")
     
-    time.sleep(3)
+    time.sleep(2)
+    print(c.server_ver)
 
     # Disconnect from server
+    time.sleep(0.5)
     c.disconnect()
     if not c.connected: print("DISCONNECTED")
 
