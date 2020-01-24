@@ -34,7 +34,7 @@ class SpyClient:
         self.port = port                # SpyServer TCP port
         self.name = f"SpyClient for Python v{PACKAGE_VER}"
         self.server_ver = 0             # SpyServer version
-        self.device_info = None         # Server device info
+        self.device = None              # Server device info
 
         # Flags
         self.connected = False          # Client connected to server
@@ -69,8 +69,18 @@ class SpyClient:
 
         # Cast message into named tuple
         if msg_type == "DEVICE_INFO":
-            unpacked = struct.unpack('IIIIIIIIIIII', body)
-            self.device_info = DeviceInfo(*unpacked)
+            # Unpack all fields except device type
+            unpacked = struct.unpack('4xIIIIIIIIIII', body)
+            
+            # Get device type as DeviceType object
+            dev_type = int.from_bytes(body[0:4], byteorder="little")
+            dev_type = ( DeviceType(dev_type), )
+
+            # Concat device type and all other fields into one tuple
+            dev_tuple = dev_type + unpacked
+
+            # Cast tuple into DeviceInfo object
+            self.device = DeviceInfo(*dev_tuple)
 
     def parse_protocol_ver(self, data):
         """
@@ -216,15 +226,15 @@ class SpyClient:
         """
 
         # Loop through fields in DeviceInfo tuple
-        for j in self.device_info._fields:
+        for j in self.device._fields:
             key = j.replace("_", " ").title()
             key = key.replace("Iq", "IQ")
             key = key.replace("Adc", "ADC") + ":"
 
-            val = getattr(self.device_info, j)
+            val = getattr(self.device, j)
 
             # Value formatting
-            if j == "device_type":        val = DeviceType(val).name
+            if j == "device_type":        val = val.name
             elif j == "max_sample_rate":  val = str(val/1000000) + " Msps"
             elif j == "max_bandwidth":    val = str(val/1000000) + " Msps"
             elif j == "min_frequency":    val = str(val/1000000) + " MHz"
