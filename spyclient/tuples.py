@@ -45,6 +45,30 @@ class DeviceInfo(NamedTuple):
     min_iq_decimation: int
     forced_iq_format:  int
 
+    def print(self):
+        """
+        Prints device information
+        """
+
+        # Loop through fields in DeviceInfo tuple
+        for j in self._fields:
+            key = j.replace("_", " ").title()
+            key = key.replace("Iq", "IQ")
+            key = key.replace("Adc", "ADC") + ":"
+
+            val = getattr(self, j)
+
+            # Value formatting
+            if j == "device_type":        val = val.name
+            elif j == "max_sample_rate":  val = str(val/1000000) + " Msps"
+            elif j == "max_bandwidth":    val = str(val/1000000) + " Msps"
+            elif j == "min_frequency":    val = str(val/1000000) + " MHz"
+            elif j == "max_frequency":    val = str(val/1000000) + " MHz"
+            elif j == "adc_resolution":   val = f"{val} bits"
+            elif j == "forced_iq_format": val = bool(val)
+
+            print(f"{key.ljust(20)}{val}")
+
 class ClientSync(NamedTuple):
     """
     Client sync struct

@@ -70,7 +70,7 @@ class SpyClient:
         # Cast message into named tuple
         if msg_type == "DEVICE_INFO":
             # Unpack all fields except device type
-            unpacked = struct.unpack('4xIIIIIIIIIII', body)
+            unpacked = struct.unpack('4x11I', body)
             
             # Get device type as DeviceType object
             dev_type = int.from_bytes(body[0:4], byteorder="little")
@@ -216,31 +216,4 @@ class SpyClient:
             return self.sck.recv(length)
         except:
             return None
-    #endregion
-
-
-    #region Print Functions
-    def print_device_info(self):
-        """
-        Prints device information from server
-        """
-
-        # Loop through fields in DeviceInfo tuple
-        for j in self.device._fields:
-            key = j.replace("_", " ").title()
-            key = key.replace("Iq", "IQ")
-            key = key.replace("Adc", "ADC") + ":"
-
-            val = getattr(self.device, j)
-
-            # Value formatting
-            if j == "device_type":        val = val.name
-            elif j == "max_sample_rate":  val = str(val/1000000) + " Msps"
-            elif j == "max_bandwidth":    val = str(val/1000000) + " Msps"
-            elif j == "min_frequency":    val = str(val/1000000) + " MHz"
-            elif j == "max_frequency":    val = str(val/1000000) + " MHz"
-            elif j == "adc_resolution":   val = f"{val} bits"
-            elif j == "forced_iq_format": val = bool(val)
-
-            print(f"{key.ljust(20)}{val}")
     #endregion

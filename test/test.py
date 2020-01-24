@@ -33,10 +33,10 @@ def init():
     # Connect to server
     c.connect()
     if c.connected: print(f"CONNECTED to {c.host}:{c.port}\n")
-    
     time.sleep(2)
+
     print(f"Server Version:     {c.server_ver.to_string()}\n")
-    c.print_device_info()
+    c.device.print()
 
     # Disconnect from server
     time.sleep(0.5)
