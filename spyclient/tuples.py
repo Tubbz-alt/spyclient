@@ -21,6 +21,12 @@ class ProtocolVersion(NamedTuple):
     minor: int
     patch: int
 
+    def to_string(self):
+        """
+        Returns server version as string
+        """        
+        return f"v{self.major}.{self.minor}.{self.patch}"
+
 class DeviceInfo(NamedTuple):
     """
     Device information struct
