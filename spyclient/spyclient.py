@@ -2,7 +2,7 @@
 spyclient.py
 https://github.com/sam210723/spyclient
 
-Airspy SpyServer client implementation for Python 3
+Airspy SpyServer client implementation for Python 3.
 """
 
 import ipaddress
@@ -25,9 +25,9 @@ class SpyClient:
     """
     Airspy SpyServer client implementation for Python 3.
 
-    Attributes:
-        host (string, optional): SpyServer host IP address. Defaults to 127.0.0.1.
-        port (int, optional): SpyServer TCP port. Defaults to 5555.
+    .. code-block:: python
+
+        client = SpyClient("127.0.0.1", 5555)
     """
 
     def __init__(self, host=DEFAULT_HOST, port=DEFAULT_PORT):

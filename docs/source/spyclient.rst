@@ -1,6 +1,6 @@
-Enums (structs)
+SpyClient Class
 =====================================
 
-.. automodule:: spyclient.enums
+.. autoclass:: spyclient.SpyClient
     :members:
     :show-inheritance:
