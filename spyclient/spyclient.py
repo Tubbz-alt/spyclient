@@ -35,6 +35,7 @@ class SpyClient:
         self.name = f"SpyClient for Python v{PACKAGE_VER}"
         self.server_ver = 0             # SpyServer version
         self.device = None              # Server device info
+        self.sync = None                # Client synchronisation info
 
         # Flags
         self.connected = False          # Client connected to server
@@ -81,6 +82,9 @@ class SpyClient:
 
             # Cast tuple into DeviceInfo object
             self.device = DeviceInfo(*dev_tuple)
+        elif msg_type == "CLIENT_SYNC":
+            unpacked = struct.unpack('9I', body)
+            self.sync = ClientSync(*unpacked)
 
     def parse_protocol_ver(self, data):
         """

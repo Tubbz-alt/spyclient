@@ -68,6 +68,7 @@ class DeviceInfo(NamedTuple):
             elif j == "forced_iq_format": val = bool(val)
 
             print(f"{key.ljust(20)}{val}")
+        print()
 
 class ClientSync(NamedTuple):
     """
@@ -83,3 +84,24 @@ class ClientSync(NamedTuple):
     max_iq_cf:   int
     min_fft_cf:  int
     max_fft_cf:  int
+
+    def print(self):
+        """
+        Prints client sync information
+        """
+
+        # Loop through fields in ClientSync tuple
+        for j in self._fields:
+            key = j.replace("_", " ").title()
+            key = key.replace("Iq", "IQ")
+            key = key.replace("Fft", "FFT")
+            key = key.replace("Cf", "CF") + ":"
+
+            val = getattr(self, j)
+
+            # Readable device type
+            if j == "can_control": val = True if val else False
+            if j != "gain" and j != "can_control": val = str(val/1000000) + " MHz"
+
+            print("{}{}".format(key.ljust(20), val))
+        print()
