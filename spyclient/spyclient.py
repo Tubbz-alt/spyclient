@@ -240,7 +240,7 @@ class SpyClient:
             elif j == "min_frequency":    val = str(val/1000000) + " MHz"
             elif j == "max_frequency":    val = str(val/1000000) + " MHz"
             elif j == "adc_resolution":   val = f"{val} bits"
-            elif j == "forced_iq_format": val = True if val else False
+            elif j == "forced_iq_format": val = bool(val)
 
             print(f"{key.ljust(20)}{val}")
     #endregion
