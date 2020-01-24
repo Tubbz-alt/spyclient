@@ -29,5 +29,8 @@ clean:
 	rmdir /S /Q build
 	rmdir /S /Q dist
 
+# Build documentation for RTD with Sphinx
+docs:
+	cd docs && make html
 
-.PHONY: all test clean
+.PHONY: all test clean docs

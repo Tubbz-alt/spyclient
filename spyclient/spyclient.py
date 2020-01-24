@@ -24,8 +24,10 @@ TIMEOUT = 2                     # Socket read timeout (sec)
 class SpyClient:
     """
     Airspy SpyServer client implementation for Python 3.
-    :param host: SpyServer host IP address (127.0.0.1)
-    :param port: SpyServer TCP port (5555)
+
+    Attributes:
+        host (string, optional): SpyServer host IP address. Defaults to 127.0.0.1.
+        port (int, optional): SpyServer TCP port. Defaults to 5555.
     """
 
     def __init__(self, host=DEFAULT_HOST, port=DEFAULT_PORT):
