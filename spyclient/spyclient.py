@@ -22,20 +22,13 @@ TIMEOUT = 2                     # Socket read timeout (sec)
 
 
 class SpyClient:
-    """
-    Airspy SpyServer client implementation for Python 3.
-
-    .. code-block:: python
-
-        client = SpyClient("127.0.0.1", 5555)
-    """
 
     def __init__(self, host=DEFAULT_HOST, port=DEFAULT_PORT):
         # Properties
         self.host = host                # SpyServer IP address
         self.port = port                # SpyServer TCP port
         self.name = f"SpyClient for Python v{PACKAGE_VER}"
-        self.server_ver = 0             # SpyServer version
+        self.server_ver = None          # SpyServer version
         self.device = None              # Server device info
         self.sync = None                # Client synchronisation info
 
@@ -45,7 +38,7 @@ class SpyClient:
 
 
     #region Protocol Functions
-    def parse_msg(self, header_bytes):
+    def _parse_msg(self, header_bytes):
         """
         Parse incoming message from server
         """
@@ -64,11 +57,12 @@ class SpyClient:
         print()
 
         # Parse server protocol version
-        self.server_ver = self.parse_protocol_ver(header.protocol)
+        if self.server_ver == None:
+            self.server_ver = self._parse_protocol_ver(header.protocol)
         #TODO: Check protocol version
 
         # Get body of message
-        body = self.recv(header.size)
+        body = self._recv(header.size)
 
         # Cast message into named tuple
         if msg_type == "DEVICE_INFO":
@@ -88,9 +82,15 @@ class SpyClient:
             unpacked = struct.unpack('9I', body)
             self.sync = ClientSync(*unpacked)
 
-    def parse_protocol_ver(self, data):
+    def _parse_protocol_ver(self, data):
         """
         Parse server protocol version into ProtocolVersion named tuple
+        
+        Args:
+            data (bytes): Protocol field bytes
+        
+        Returns:
+            ProtocolVersion: Parsed ProtocolVersion named tuple
         """
 
         major = data >> 24
@@ -99,7 +99,7 @@ class SpyClient:
 
         return ProtocolVersion(major, minor, patch)
 
-    def say_hello(self):
+    def _say_hello(self):
         """
         Say hello to server
         """
@@ -112,13 +112,15 @@ class SpyClient:
 
         # Send version and client name to server
         body = ver + client        
-        self.send_command(CommandType.HELLO.value, body)
+        self._send_command(CommandType.HELLO.value, body)
     
-    def send_command(self, cmd, body):
+    def _send_command(self, cmd, body):
         """
         Sends command packet to server
-        :param cmd: Command type
-        :param body: Command body bytes
+        
+        Args:
+            cmd (CommandType): Type of command
+            body (bytes): Body of the command
         """
 
         # Assemble command header
@@ -127,12 +129,12 @@ class SpyClient:
 
         # Send command to server
         command = header + body
-        self.send(command)
+        self._send(command)
     #endregion
 
 
     #region Socket Functions
-    def recv_loop(self):
+    def _recv_loop(self):
         """
         Socket receive thread
         """
@@ -144,7 +146,7 @@ class SpyClient:
             # Socket has data available
             if rx:
                 # Get message header
-                header = self.recv()
+                header = self._recv()
 
                 # Ignore bool len exception
                 if type(header) == bool:
@@ -155,7 +157,7 @@ class SpyClient:
                     self.disconnect()
                     raise PermissionError("SpyServer could not find/acquire a device")
 
-                self.parse_msg(header)
+                self._parse_msg(header)
     
     def connect(self):
         """
@@ -187,10 +189,10 @@ class SpyClient:
         # Setup and start socket receive thread
         self.rx_thread = threading.Thread()
         self.rx_thread.name = "SpyClient Socket Receiver"
-        self.rx_thread.run = self.recv_loop
+        self.rx_thread.run = self._recv_loop
         self.rx_thread.start()
 
-        self.say_hello()
+        self._say_hello()
 
         return True
 
@@ -203,17 +205,30 @@ class SpyClient:
         self.sck.close()
         self.connected = False
 
-    def send(self, data):
+    def _send(self, data):
         """
         Send data to server
+        
+        Args:
+            data (bytes): Data to send
+        
+        Returns:
+            bool: ``False`` if socket is not connected
         """
 
         if not self.connected: return False
+        
         self.sck.send(data)
 
-    def recv(self, length=20):
+    def _recv(self, length=20):
         """
         Receive data from server
+        
+        Args:
+            length (int, optional): Number of bytes to receive. Defaults to 20 (one message header).
+        
+        Returns:
+            bytes/None: ``bytes`` when data is available, otherwise ``None``
         """
 
         if not self.connected: return False
