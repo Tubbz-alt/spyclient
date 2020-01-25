@@ -66,3 +66,25 @@ class StreamType(Enum):
     FFT_ONLY = 4                    #: Only receive an FFT data from server
     FFT_IQ   = 5                    #: Receive both FFT data and an IQ stream from server
     FFT_AF   = 6                    #: Receive both FFT data and an audio stream from server
+
+class StreamType(Enum):
+    """
+    Stream types supported by SpyServer.
+    """
+
+    STATUS = 0                      #: 
+    IQ = 1                          #: IQ stream
+    AF = 2                          #: Audio stream
+    FFT = 4                         #: FFT data
+
+class StreamFormat(Enum):
+    """
+    IQ, AF and FFT stream types supported by SpyServer.
+    """
+
+    INVALID = 0                     #: Invalid stream type
+    UINT8 = 1                       #: Unsigned 8-bit integer
+    INT16 = 2                       #: Signed 16-bit integer
+    INT24 = 3                       #: Signed 24-bit integer
+    FLOAT = 4                       #: 32-bit float
+    DINT4 = 5                       #: 4-bit integer
