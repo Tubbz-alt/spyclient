@@ -56,3 +56,13 @@ class SettingType(Enum):
     FFT_DB_OFFSET      = struct.pack('<I', 203)
     FFT_DB_RANGE       = struct.pack('<I', 204)
     FFT_DISPLAY_PIXELS = struct.pack('<I', 205)
+class StreamType(Enum):
+    """
+    Stream types supported by SpyServer.
+    """
+
+    IQ_ONLY  = 1                    #: Only receive an IQ stream from server
+    AF_ONLY  = 2                    #: Only receive an audio stream from server
+    FFT_ONLY = 4                    #: Only receive an FFT data from server
+    FFT_IQ   = 5                    #: Receive both FFT data and an IQ stream from server
+    FFT_AF   = 6                    #: Receive both FFT data and an audio stream from server
