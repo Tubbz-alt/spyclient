@@ -30,11 +30,11 @@ class SpyClient:
         self.name = f"SpyClient for Python v{PACKAGE_VER}"
         self.server_ver = None          # SpyServer version
         self.device = None              # Server device info
-        self.sync = None                # Client synchronisation info
+        self._sync = None               # Client synchronisation info
 
         # Flags
         self.connected = False          # Client connected to server
-        self.rx_stop = False            # Stop socket receive thread
+        self._rx_stop = False           # Stop socket receive thread
 
 
     #region Protocol Functions
@@ -80,7 +80,7 @@ class SpyClient:
             self.device = DeviceInfo(*dev_tuple)
         elif msg_type == "CLIENT_SYNC":
             unpacked = struct.unpack('9I', body)
-            self.sync = ClientSync(*unpacked)
+            self._sync = ClientSync(*unpacked)
 
     def _parse_protocol_ver(self, data):
         """
@@ -139,9 +139,9 @@ class SpyClient:
         Socket receive thread
         """
 
-        while not self.rx_stop:
+        while not self._rx_stop:
             # Block thread until socket is ready for reading
-            rx, tx, err = select([ self.sck ], [], [], TIMEOUT)
+            rx, tx, err = select([ self._sck ], [], [], TIMEOUT)
 
             # Socket has data available
             if rx:
@@ -175,11 +175,11 @@ class SpyClient:
             raise ValueError(f"Host port \"{self.port}\" is invalid")
 
         # Create and configure socket
-        self.sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sck.settimeout(TIMEOUT)
+        self._sck = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self._sck.settimeout(TIMEOUT)
 
         try:
-            self.sck.connect((self.host, self.port))
+            self._sck.connect((self.host, self.port))
         except socket.error:
             raise
 
@@ -201,8 +201,8 @@ class SpyClient:
         Disconnect from SpyServer
         """
 
-        self.rx_stop = True
-        self.sck.close()
+        self._rx_stop = True
+        self._sck.close()
         self.connected = False
 
     def _send(self, data):
@@ -218,7 +218,7 @@ class SpyClient:
 
         if not self.connected: return False
         
-        self.sck.send(data)
+        self._sck.send(data)
 
     def _recv(self, length=20):
         """
@@ -234,7 +234,7 @@ class SpyClient:
         if not self.connected: return False
         
         try:
-            return self.sck.recv(length)
+            return self._sck.recv(length)
         except:
             return None
     #endregion

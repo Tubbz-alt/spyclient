@@ -37,7 +37,7 @@ def init():
 
     print(f"Server Version:     {c.server_ver.to_string()}\n")
     c.device.print()
-    c.sync.print()
+    c._sync.print()
 
     # Disconnect from server
     time.sleep(0.5)
