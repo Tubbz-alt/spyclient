@@ -17,8 +17,8 @@ class MessageType(Enum):
     Message types sent by SpyServer.
     """
 
-    DEVICE_INFO  = 0                #: Properties of the SDR attached to SpyServer (see `DeviceInfo <tuples.html#spyclient.tuples.DeviceInfo>`_ named tuple)
-    CLIENT_SYNC  = 1                #: Current state of SpyServer used to synchronise the client instance with the server (see `ClientSync <tuples.html#spyclient.tuples.ClientSync>`_ named tuple)
+    DEVICE_INFO  = 0                #: Properties of the SDR attached to SpyServer (see `DeviceInfo <tuples.html#spyclient.tuples.DeviceInfo>`_)
+    CLIENT_SYNC  = 1                #: Current state of SpyServer used to synchronise the client instance with the server (see `ClientSync <tuples.html#spyclient.tuples.ClientSync>`_)
     PONG         = 2                #: Reponse to a PING command (see `CommandType.PING <enums.html#spyclient.enums.CommandType.PING>`_)
     READ_SETTING = 3                #: Reponse to a GET command (see `CommandType.GET <enums.html#spyclient.enums.CommandType.GET>`_)
     UINT8_IQ     = 100              #: Unsigned 8-bit integer IQ sample
