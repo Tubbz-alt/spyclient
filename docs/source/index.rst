@@ -1,23 +1,22 @@
 SpyClient Documentation
 =====================================
 
-SpyClient is a client implementation of the `Airspy SpyServer <https://airspy.com>`_ protocol for Python 3.
-SpyServer is purpose-built server software for accessing Software Defined Radio hardware over a network.
+**SpyClient** is a client implementation of the `Airspy SpyServer <https://airspy.com>`_ protocol for Python 3.
+**SpyServer** is a server application for accessing and controlling Software Defined Radio hardware over a network.
 
+Table of Contents:
+    .. toctree::
+        :maxdepth: 2
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-   
-   spyclient
-   tuples
-   enums
+        spyclient
+        tuples
+        enums
 
 
 Getting Started
 =====================================
 
-To use **SpyClient** in your Python code, import the SpyClient class from the spyclient module:
+To use SpyClient in your Python code, import the SpyClient class from the spyclient module:
 
 .. code-block:: python
 
@@ -31,7 +30,7 @@ Next, create a new instance of the ``SpyClient()`` class:
     client = SpyClient()
 
 
-By default SpyClient will try connect to a SpyServer running on the same host (``127.0.0.1:5555``).
+By default SpyClient will try connect to SpyServer running on the same host (``127.0.0.1:5555``).
 If this is not the case, the server host and port can be specified when creating a ``SpyClient()`` instance:
 
 .. code-block:: python
@@ -46,3 +45,10 @@ Alternatively, the server host and port can be specified after ``SpyClient()`` i
     client = SpyClient()
     client.host = "127.0.0.1"
     client.port = 5555
+
+
+The client name which appears in the SpyServer log can be set using the ``.name`` attribute. By default this name is ``"SpyClient for Python [PACKAGE VERSION]"``.
+
+.. code-block:: python
+
+    client.name = "SpyClient for Python"
